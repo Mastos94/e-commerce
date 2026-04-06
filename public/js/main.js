@@ -53,7 +53,7 @@ const UI = {
    * @returns {string}
    */
   formatCurrency(amount) {
-    return `$${amount.toFixed(2)}`;
+    return `${amount.toFixed(2)} ₽`;
   },
 
   /**
@@ -123,10 +123,12 @@ async function loadProducts(page = 1) {
     const response = await API.getProducts(params);
     console.log('Ответ API:', response);
 
-    if (response.success && response.data.data.length > 0) {
-      console.log('Найдено товаров:', response.data.data.length);
-      
-      container.innerHTML = response.data.data.map(product => `
+    const products = response.data?.data || [];
+
+    if (response.success && products.length > 0) {
+      console.log('Найдено товаров:', products.length);
+
+      container.innerHTML = products.map(product => `
         <div class="product-card">
           <div class="product-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">📦</div>
           <div class="product-info">
@@ -223,7 +225,20 @@ function handleLogout() {
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('main.js: DOM загружен');
-  
+
+  // Handle invalid token scenario - clear stale tokens
+  if (API.isAuthenticated()) {
+    const token = API.getToken();
+    // Check if token looks valid (JWT tokens should have 3 parts separated by dots)
+    const tokenParts = token.split('.');
+    if (tokenParts.length !== 3) {
+      console.warn('Обнаружен недействительный токен, очищаем хранилище');
+      API.removeToken();
+      window.location.reload();
+      return;
+    }
+  }
+
   // Initialize cart
   Cart.init();
 

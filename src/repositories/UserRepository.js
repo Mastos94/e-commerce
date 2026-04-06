@@ -17,7 +17,7 @@ class UserRepository extends BaseRepository {
    * @returns {Promise<User|null>}
    */
   async findByEmail(email) {
-    return this.model.findByEmail(email).lean();
+    return this.model.findOne({ email: email.toLowerCase() }).lean();
   }
 
   /**

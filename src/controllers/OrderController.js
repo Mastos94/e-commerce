@@ -48,17 +48,26 @@ async function createOrder(req, res, next) {
 
 /**
  * GET /api/v1/orders
- * Get user's orders
+ * Get user's orders (admin sees all orders)
  */
 async function getUserOrders(req, res, next) {
   try {
-    const orders = await orderService.getUserOrders(req.user._id, req.query);
-
-    res.status(200).json({
-      success: true,
-      data: orders,
-      message: 'Orders retrieved successfully'
-    });
+    // If admin, get all orders, otherwise get user's orders
+    if (req.user.role === 'admin') {
+      const orders = await orderService.getAllOrders(req.query);
+      res.status(200).json({
+        success: true,
+        data: orders,
+        message: 'All orders retrieved successfully'
+      });
+    } else {
+      const orders = await orderService.getUserOrders(req.user._id, req.query);
+      res.status(200).json({
+        success: true,
+        data: orders,
+        message: 'Orders retrieved successfully'
+      });
+    }
   } catch (error) {
     next(error);
   }

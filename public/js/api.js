@@ -58,14 +58,13 @@ const API = {
    */
   async request(endpoint, options = {}) {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const config = {
       method: options.method || 'GET',
       headers: {
         'Content-Type': 'application/json',
         ...options.headers
-      },
-      ...options
+      }
     };
 
     // Add authentication token

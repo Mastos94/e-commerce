@@ -243,6 +243,7 @@ img {
 
 .btn-primary:hover:not(:disabled) {
   background-color: var(--primary-dark);
+  color: var(--text-light);
 }
 
 .btn-secondary {

@@ -3,7 +3,6 @@
  * Handles order creation and management
  */
 
-const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const OrderItem = require('../models/OrderItem');
 const ShoppingCart = require('../models/ShoppingCart');
@@ -17,34 +16,37 @@ const orderRepository = require('../repositories/OrderRepository');
  * @returns {Promise<Object>} - Created order with items
  */
 async function createOrder(userId, shippingAddress) {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
   try {
     // Get user's cart
-    const cart = await ShoppingCart.findOne({ userId }).session(session);
+    const cart = await ShoppingCart.findOne({ userId });
 
     if (!cart || cart.items.length === 0) {
-      const error = new Error('Cart is empty');
+      const error = new Error('Корзина пуста');
       error.statusCode = 400;
       throw error;
     }
 
-    // Verify stock for all items
+    // Verify stock for all items and collect product data
+    const productsData = [];
     for (const cartItem of cart.items) {
       const product = await productRepository.findById(cartItem.productId);
-      
+
       if (!product) {
-        const error = new Error(`Product ${cartItem.productId} not found`);
+        const error = new Error(`Товар ${cartItem.productId} не найден`);
         error.statusCode = 404;
         throw error;
       }
 
       if (product.stock < cartItem.quantity) {
-        const error = new Error(`Insufficient stock for product ${product.name}`);
+        const error = new Error(`Недостаточно товара "${product.name}" на складе`);
         error.statusCode = 400;
         throw error;
       }
+
+      productsData.push({
+        product,
+        cartItem
+      });
     }
 
     // Calculate total amount
@@ -53,43 +55,36 @@ async function createOrder(userId, shippingAddress) {
     }, 0);
 
     // Create order
-    const order = await Order.create([{
+    const order = await Order.create({
       userId,
       totalAmount,
       shippingAddress,
       status: 'pending'
-    }], { session });
+    });
 
     // Create order items
     const orderItems = cart.items.map(cartItem => ({
-      orderId: order[0]._id,
-      productId: cartItem.productId,
+      orderId: order._id,
+      productId: typeof cartItem.productId === 'object' ? cartItem.productId._id : cartItem.productId,
       quantity: cartItem.quantity,
       price: cartItem.price,
       subtotal: cartItem.quantity * cartItem.price
     }));
 
-    await OrderItem.insertMany(orderItems, { session });
+    await OrderItem.insertMany(orderItems);
 
     // Decrease product stock
-    for (const cartItem of cart.items) {
-      await productRepository.decreaseStock(cartItem.productId, cartItem.quantity);
+    for (const data of productsData) {
+      await productRepository.decreaseStock(data.cartItem.productId, data.cartItem.quantity);
     }
 
     // Clear cart
-    await cart.clear({ session });
-
-    // Commit transaction
-    await session.commitTransaction();
+    await cart.clear();
 
     // Return order with items
-    return await getOrderById(order[0]._id);
+    return await getOrderById(order._id);
   } catch (error) {
-    // Rollback transaction on error
-    await session.abortTransaction();
     throw error;
-  } finally {
-    session.endSession();
   }
 }
 
@@ -115,8 +110,8 @@ async function getOrderById(orderId) {
   return {
     ...order,
     items: items.map(item => ({
-      productId: item.productId._id,
-      productName: item.productId.name,
+      productId: item.productId ? item.productId._id : null,
+      productName: item.productId ? item.productId.name : 'Unknown Product',
       quantity: item.quantity,
       price: item.price,
       subtotal: item.subtotal
@@ -175,7 +170,7 @@ async function getAllOrders(queryParams = {}) {
     filters.status = status;
   }
 
-  return await orderRepository.findAll(filters, { page, limit });
+  return await orderRepository.findAllWithDetails(filters, { page, limit });
 }
 
 module.exports = {

@@ -164,7 +164,7 @@ async function removeCartItem(itemId) {
   try {
     console.log('Удаляем товар из корзины:', itemId);
     const response = await API.removeFromCart(itemId);
-    
+
     if (response.success) {
       console.log('Товар удалён:', response.data);
       await loadCart(); // Перезагружаем корзину
@@ -175,3 +175,25 @@ async function removeCartItem(itemId) {
     UI.showAlert('Ошибка удаления: ' + (error.message || 'неизвестная ошибка'), 'danger');
   }
 }
+
+// ==========================================
+// Checkout Button
+// ==========================================
+
+/**
+ * Setup checkout button
+ */
+function setupCheckoutButton() {
+  const checkoutBtn = document.getElementById('checkout-btn');
+  
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+      window.location.href = '/checkout';
+    });
+  }
+}
+
+// Add to DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+  setupCheckoutButton();
+});

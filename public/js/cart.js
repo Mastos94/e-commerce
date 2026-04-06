@@ -30,6 +30,15 @@ const Cart = {
       }
     } catch (error) {
       console.error('Failed to load cart:', error);
+      
+      // Handle invalid/expired token or user not found - clear auth and reload
+      if (error.message === 'Invalid token' || error.message === 'Token expired' || error.message === 'User not found') {
+        console.warn('Token is invalid, expired, or user not found, clearing auth data');
+        API.removeToken();
+        window.location.reload();
+        return;
+      }
+      
       this.data = { items: [], totalItems: 0, totalAmount: 0 };
     }
   },

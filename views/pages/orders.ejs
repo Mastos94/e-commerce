@@ -1,0 +1,18 @@
+<%- include('../partials/header') %>
+
+<div class="container" style="max-width: 1000px; margin: 2rem auto;">
+  <h1 style="margin-bottom: 2rem; color: var(--text-primary);">Мои заказы</h1>
+
+  <div id="alert-container"></div>
+
+  <!-- Список заказов -->
+  <div id="orders-list" style="display: flex; flex-direction: column; gap: 1.5rem;">
+    <div class="loading" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+      Загрузка заказов...
+    </div>
+  </div>
+</div>
+
+<script src="/js/orders.js"></script>
+
+<%- include('../partials/footer') %>

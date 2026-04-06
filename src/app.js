@@ -100,6 +100,18 @@ app.get('/register', (req, res) => {
   res.render('pages/register', { title: 'Регистрация' });
 });
 
+app.get('/checkout', (req, res) => {
+  res.render('pages/checkout', { title: 'Оформление заказа' });
+});
+
+app.get('/orders', (req, res) => {
+  res.render('pages/orders', { title: 'Мои заказы' });
+});
+
+app.get('/orders/:id', (req, res) => {
+  res.render('pages/order-detail', { title: 'Детали заказа' });
+});
+
 // ==========================================
 // Error Handling
 // ==========================================
