@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - Synergy E-Commerce</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">Synergy</a>
+        <nav class="nav">
+          <a href="/" class="nav-link">Home</a>
+          <a href="/products" class="nav-link">Products</a>
+          <a href="/cart" class="nav-link">
+            Cart <span id="cart-count" style="display: none;">0</span>
+          </a>
+          <div id="auth-links" class="nav">
+            <a href="/login" class="nav-link">Login</a>
+            <a href="/register" class="nav-link">Register</a>
+          </div>
+          <div id="user-links" class="nav" style="display: none;">
+            <a href="/orders" class="nav-link">My Orders</a>
+            <button onclick="handleLogout()" class="nav-link">Logout</button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Alert Container -->
+  <div class="container">
+    <div id="alert-container"></div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="container">
+      <%- content || '' %>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2026 Synergy E-Commerce. Laboratory Work #1-4</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

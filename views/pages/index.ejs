@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+
+<div class="text-center" style="padding: 4rem 0;">
+  <h1 style="font-size: 3rem; margin-bottom: 1rem; color: #2563eb;">Добро пожаловать в Synergy E-Commerce</h1>
+  <p style="font-size: 1.25rem; color: #64748b; margin-bottom: 2rem;">Откройте для себя удивительные товары по отличным ценам</p>
+  <a href="/products" class="btn btn-primary btn-lg">Начать покупки</a>
+</div>
+
+<div style="margin-top: 3rem;">
+  <h2 style="margin-bottom: 1.5rem; font-size: 2rem; color: #1e293b;">Рекомендуемые товары</h2>
+  <div id="products-container" class="product-grid">
+    <p style="text-align: center; grid-column: 1/-1;">Загрузка товаров...</p>
+  </div>
+  <div id="pagination" class="pagination"></div>
+</div>
+
+<script src="/js/home.js"></script>
+
+<%- include('../partials/footer') %>

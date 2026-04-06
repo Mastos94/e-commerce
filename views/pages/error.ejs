@@ -1,0 +1,12 @@
+<%- include('../partials/header') %>
+
+<div class="card text-center">
+  <div class="card-body">
+    <h1 style="font-size: 4rem; color: #ef4444; margin-bottom: 1rem;"><%= typeof statusCode !== 'undefined' ? statusCode : '500' %></h1>
+    <h2 style="margin-bottom: 1rem; color: #1e293b;"><%= typeof title !== 'undefined' ? title : 'Ошибка' %></h2>
+    <p style="margin-bottom: 2rem; color: #64748b;"><%= typeof message !== 'undefined' ? message : 'Произошла ошибка' %></p>
+    <a href="/" class="btn btn-primary">На главную</a>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

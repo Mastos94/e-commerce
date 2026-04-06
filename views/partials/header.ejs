@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Synergy' %> - Synergy E-Commerce</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- Основные скрипты -->
+  <script src="/js/api.js"></script>
+  <script src="/js/cart.js"></script>
+  <script src="/js/main.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">Synergy</a>
+        <nav class="nav">
+          <a href="/" class="nav-link">Главная</a>
+          <a href="/products" class="nav-link">Товары</a>
+          <a href="/cart" class="nav-link">
+            Корзина <span id="cart-count" style="display: none; background: #ef4444; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem;">0</span>
+          </a>
+          <div id="auth-links" class="nav">
+            <a href="/login" class="nav-link">Вход</a>
+            <a href="/register" class="nav-link">Регистрация</a>
+          </div>
+          <div id="user-links" class="nav" style="display: none;">
+            <a href="/orders" class="nav-link">Мои заказы</a>
+            <button id="logout-btn" class="btn btn-sm btn-secondary">Выход</button>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Alert Container -->
+  <div class="container">
+    <div id="alert-container"></div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="container">

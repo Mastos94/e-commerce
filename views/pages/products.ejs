@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<h1 style="margin-bottom: 1.5rem; font-size: 2.5rem; color: #1e293b;">Товары</h1>
+
+<!-- Фильтры -->
+<div class="filters">
+  <div class="filter-group">
+    <input type="text" id="filter-search" class="form-input" placeholder="Поиск товаров...">
+  </div>
+  <div class="filter-group">
+    <select id="filter-category" class="filter-select">
+      <option value="">Все категории</option>
+      <option value="Electronics">Электроника</option>
+      <option value="Clothing">Одежда</option>
+      <option value="Books">Книги</option>
+      <option value="Home">Дом</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <select id="filter-sort" class="filter-select">
+      <option value="">Сортировка</option>
+      <option value="price-asc">Цена: по возрастанию</option>
+      <option value="price-desc">Цена: по убыванию</option>
+      <option value="name-asc">Название: А-Я</option>
+      <option value="createdAt-desc">Сначала новые</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <button id="apply-filters-btn" class="btn btn-primary">Применить фильтры</button>
+  </div>
+</div>
+
+<!-- Сетка товаров -->
+<div id="products-container" class="product-grid"></div>
+
+<!-- Пагинация -->
+<div id="pagination" class="pagination"></div>
+
+<script src="/js/products.js"></script>
+
+<%- include('../partials/footer') %>
