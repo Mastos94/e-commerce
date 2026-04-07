@@ -19,13 +19,17 @@ async function loadProductDetail() {
 
   try {
     const response = await API.getProduct(productId);
+    
+    console.log('Ответ API для товара:', response);
 
     if (!response.success || !response.data) {
       container.innerHTML = '<p class="text-center" style="padding: 3rem; color: #ef4444;">Товар не найден</p>';
       return;
     }
 
-    const product = response.data.data;
+    const product = response.data;
+    
+    console.log('Данные товара:', product);
 
     container.innerHTML = `
       <div class="product-detail">
