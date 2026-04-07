@@ -129,7 +129,7 @@ async function loadProducts(page = 1) {
       console.log('Найдено товаров:', products.length);
 
       container.innerHTML = products.map(product => `
-        <div class="product-card">
+        <div class="product-card" data-product-id="${product._id}">
           <div class="product-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">📦</div>
           <div class="product-info">
             <div class="product-name">${product.name}</div>
@@ -138,7 +138,7 @@ async function loadProducts(page = 1) {
             <div class="product-stock ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}">
               ${product.stock > 0 ? `✓ В наличии (${product.stock} шт.)` : '✗ Нет в наличии'}
             </div>
-            <button class="btn btn-primary btn-sm add-to-cart-btn" 
+            <button class="btn btn-primary btn-sm add-to-cart-btn"
                     data-product-id="${product._id}"
                     ${product.stock === 0 ? 'disabled' : ''}>
               🛒 В корзину
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize cart
   Cart.init();
 
-  // Делегирование событий для кнопок "В корзину"
+  // Делегирование событий для кнопок "В корзину" и карточек товаров
   document.addEventListener('click', function(event) {
     // Проверяем, была ли нажата кнопка "В корзину"
     const addToCartBtn = event.target.closest('.add-to-cart-btn');
@@ -256,7 +256,17 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         console.error('Product ID не найден!');
       }
-      return;
+      return; // Не выполняем переход по карточке при клике на кнопку
+    }
+
+    // Проверяем, был ли клик по карточке товара (но не по кнопке)
+    const productCard = event.target.closest('.product-card');
+    if (productCard) {
+      const productId = productCard.getAttribute('data-product-id');
+      if (productId) {
+        console.log('Переход к карточке товара:', productId);
+        window.location.href = `/products/${productId}`;
+      }
     }
   });
 

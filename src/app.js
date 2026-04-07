@@ -88,6 +88,10 @@ app.get('/products', (req, res) => {
   res.render('pages/products', { title: 'Товары' });
 });
 
+app.get('/products/:id', (req, res) => {
+  res.render('pages/product-detail', { title: 'Детали товара' });
+});
+
 app.get('/cart', (req, res) => {
   res.render('pages/cart', { title: 'Корзина покупок' });
 });
