@@ -34,7 +34,7 @@ async function getCart(userId) {
 async function addToCart(userId, productId, quantity) {
   // Verify product exists and has stock
   const product = await productRepository.findById(productId);
-  
+
   if (!product) {
     const error = new Error('Product not found');
     error.statusCode = 404;
@@ -47,14 +47,18 @@ async function addToCart(userId, productId, quantity) {
     throw error;
   }
 
-  // Get or create cart
-  let cart = await ShoppingCart.getOrCreateCart(userId);
+  // Get or create cart (without populate to keep productId as ObjectId)
+  let cart = await ShoppingCart.findOne({ userId });
+
+  if (!cart) {
+    cart = await ShoppingCart.create({ userId, items: [] });
+  }
 
   // Add item to cart
   await cart.addItem(productId, quantity, product.price);
 
   // Return updated cart with populated products
-  cart = await ShoppingCart.getOrCreateCart(userId);
+  cart = await ShoppingCart.findOne({ userId }).populate('items.productId', 'name price images');
 
   return {
     _id: cart._id,

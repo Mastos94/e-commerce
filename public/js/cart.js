@@ -148,6 +148,9 @@ const Cart = {
    * Setup event listeners for cart actions (delegation)
    */
   setupCartEventListeners() {
+    // Не вешаем обработчики на странице корзины - там работает cart-page.js
+    if (window.location.pathname === '/cart') return;
+    
     const cartItems = document.getElementById('cart-items');
     if (!cartItems) return;
 

@@ -73,8 +73,12 @@ shoppingCartSchema.virtual('totalAmount').get(function() {
  * @returns {Promise<ShoppingCart>}
  */
 shoppingCartSchema.methods.addItem = async function(productId, quantity, price) {
+  // Convert productId to string for comparison
+  const productIdStr = productId.toString();
+  
+  // Find existing item by productId
   const existingItem = this.items.find(
-    item => item.productId.toString() === productId.toString()
+    item => item.productId.toString() === productIdStr
   );
 
   if (existingItem) {

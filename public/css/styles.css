@@ -160,6 +160,7 @@ img {
   box-shadow: var(--shadow);
   overflow: hidden;
   transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
 
 .product-card:hover {
@@ -559,6 +560,7 @@ img {
 }
 
 .filter-select {
+  cursor: pointer;
   width: 100%;
   padding: 0.625rem 0.875rem;
   border: 1px solid var(--border-color);

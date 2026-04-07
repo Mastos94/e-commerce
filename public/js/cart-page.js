@@ -79,19 +79,27 @@ async function loadCart() {
 /**
  * Setup event listeners for cart actions
  */
+let cartEventListenersAttached = false;
+
 function setupCartEventListeners() {
-  const container = document.getElementById('cart-items');
-  
-  // Делегирование событий
-  container.addEventListener('click', async function(event) {
+  // Привязываем обработчик только один раз на уровне document
+  if (cartEventListenersAttached) return;
+  cartEventListenersAttached = true;
+
+  document.addEventListener('click', async function(event) {
     const target = event.target;
+    const container = document.getElementById('cart-items');
+    
+    // Проверяем что клик внутри контейнера корзины
+    if (!container || !container.contains(target)) return;
+    
     const itemId = target.getAttribute('data-item-id');
     
     if (!itemId) return;
     
     // Уменьшение количества
     if (target.classList.contains('quantity-decrease')) {
-      const input = container.querySelector(`.quantity-input-field[data-item-id="${itemId}"]`);
+      const input = document.querySelector(`.quantity-input-field[data-item-id="${itemId}"]`);
       const newQuantity = parseInt(input.value) - 1;
       
       if (newQuantity >= 1) {
@@ -107,7 +115,7 @@ function setupCartEventListeners() {
     
     // Увеличение количества
     if (target.classList.contains('quantity-increase')) {
-      const input = container.querySelector(`.quantity-input-field[data-item-id="${itemId}"]`);
+      const input = document.querySelector(`.quantity-input-field[data-item-id="${itemId}"]`);
       const newQuantity = parseInt(input.value) + 1;
       await updateCartItemQuantity(itemId, newQuantity);
       return;
@@ -123,8 +131,11 @@ function setupCartEventListeners() {
   });
   
   // Обработка ручного ввода в поле количества
-  container.addEventListener('change', function(event) {
+  document.addEventListener('change', function(event) {
     if (event.target.classList.contains('quantity-input-field')) {
+      const container = document.getElementById('cart-items');
+      if (!container || !container.contains(event.target)) return;
+      
       const itemId = event.target.getAttribute('data-item-id');
       const newQuantity = parseInt(event.target.value);
       
